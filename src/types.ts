@@ -26,9 +26,9 @@ export interface NoteData{
 
 
 export interface NoteFormProps {
- 
+  onAddTag:(tag:Tag) => void
   onSubmit:(note: NoteData)=>void;
-
+  availableTags:Tag[]
 }
 {/* Create React Select Expects an object label and value attributes*/}
 export interface Tag {

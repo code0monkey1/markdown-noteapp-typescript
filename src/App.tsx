@@ -18,13 +18,18 @@ function App() {
         setNotes(prevNotes => prevNotes.concat({...data, id:uuid(),tagIds:tags.map(t =>t.id)}) )
 
   }
+
+    const addTag=(tag:Tag)=>{
+       
+      setTags(tags=> tags.concat(tag))
+  }
   
   return (
     <div >
       <Container style={{textAlign:"center"}}>
           <Routes>
               <Route path="/" element={<h1>Home</h1>}/>
-              <Route path="/new" element={<NewNote onSubmit={onCreateNote}/>}/>
+              <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>}/>
             
               <Route path="/:id" >   // nested routes follow..
                  

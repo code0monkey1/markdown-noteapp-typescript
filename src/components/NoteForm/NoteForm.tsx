@@ -4,26 +4,34 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { Box, Button, FormControl, Grid, InputLabel, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
+import { v4 as uuid } from 'uuid';
 import { NoteFormProps, Tag } from '../../types';
 
-export function NoteForm(props: NoteFormProps) {
+export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
  
   const titleRef=useRef<HTMLInputElement>(null)
   const  contentRef = useRef<HTMLInputElement>(null)
   const [selectedTags,setSelectedTags] = useState<Tag[]>([])
 
-  const onSubmit=(event: FormEvent)=>{
+  const onNoteSubmit=(event: FormEvent)=>{
    event.preventDefault();
      
    const values ={
     title:titleRef.current?.value!,
     content:contentRef.current?.value!,
-    tags:selectedTags
+    tags:selectedTags 
    }
    
-   props.onSubmit(values)
+   onSubmit(values)
   }
-  
+
+  const onNewTagCreation=(label:string) => {
+    const newTag ={id:uuid() , label}
+    onAddTag(newTag)
+    setSelectedTags(tags => tags.concat(newTag))
+  }
+
+
   return<>
 
       <Grid container spacing={2} direction={'column'} style={{border:"2px solid black",padding:"2rem",borderRadius:"2rem"}}>
@@ -38,8 +46,12 @@ export function NoteForm(props: NoteFormProps) {
               <FormControl style={{width:"100%",paddingTop:"0.8rem"}}> 
                 {/* Create React Select Expects an object label and value attributes*/}
                 <CreatableReactSelect value={selectedTags.map(tag=>{ return {label:tag.label,value:tag.id} }) } 
-                onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ return {label:tag.label,id:tag.value} }))}}
-                id="my-multi" isMulti placeholder="Tags"/>
+                onCreateOption={onNewTagCreation}
+                onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ 
+                  return {label:tag.label,id:tag.value} }))}}
+                id="my-multi" 
+                isMulti 
+                placeholder="Tags"/>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
@@ -56,7 +68,7 @@ export function NoteForm(props: NoteFormProps) {
             <Grid item container xs={12} spacing={4} justifyContent={'center'}>
                 
               <Grid item>
-                <Button variant='contained' type="submit" onClick={onSubmit}>Submit</Button>
+                <Button variant='contained' type="submit" onClick={onNoteSubmit}>Submit</Button>
               </Grid> 
           
               <Grid item>
