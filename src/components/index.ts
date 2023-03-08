@@ -1,1 +1,2 @@
-export {NoteForm} from './NoteForm';
+export { NoteForm } from './NoteForm';
+

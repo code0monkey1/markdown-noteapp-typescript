@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { v4 as uuid } from 'uuid';
 import NewNote from "./components/NewNote";
+import NoteList from "./components/NoteList";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { NoteData, RawNote, Tag } from "./types";
 
@@ -30,7 +31,7 @@ function App() {
           <Routes>
               <Route path="/" element={<h1>Home</h1>}/>
               <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>}/>
-            
+              <Route path ="/note-list" element={<NoteList notes={notesWithTags} availableTags={tags}/>}/>
               <Route path="/:id" >   // nested routes follow..
                  
                   //this will show if we navigate to id path

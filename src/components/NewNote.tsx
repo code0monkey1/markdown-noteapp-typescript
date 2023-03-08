@@ -1,17 +1,13 @@
 
-import { NoteData, Tag } from '../types';
+import { Typography } from '@mui/material';
+import { NewNoteProps } from '../types';
 import { NoteForm } from './NoteForm';
 
-export interface NewNoteProps{
-  onSubmit: (note: NoteData) => void,
-  onAddTag:(tag:Tag) => void,
-  availableTags: Tag[]
-}
 const NewNote=({onSubmit,onAddTag,availableTags}:NewNoteProps) =>{
   
   return (
     <>
-    <h1 style={{margin:"4rem"}}>{`NewNote`}</h1>
+    <Typography variant="h3" style={{fontFamily:"Nunito",margin:"3rem"}}>CREATE NEW NOTE</Typography>
     <NoteForm onSubmit={onSubmit} onAddTag={onAddTag} availableTags={availableTags}/>
     </>
   )

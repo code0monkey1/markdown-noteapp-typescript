@@ -2,17 +2,17 @@ import { FormEvent, useRef, useState } from 'react';
 
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { Box, Button, FormControl, Grid, InputLabel, TextField } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
 import { v4 as uuid } from 'uuid';
 import { NoteFormProps, Tag } from '../../types';
-
 export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
  
   const titleRef=useRef<HTMLInputElement>(null)
   const  contentRef = useRef<HTMLInputElement>(null)
   const [selectedTags,setSelectedTags] = useState<Tag[]>([])
-
+  const navigateTo = useNavigate();
+  
   const onNoteSubmit=(event: FormEvent)=>{
    event.preventDefault();
      
@@ -21,14 +21,17 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
     content:contentRef.current?.value!,
     tags:selectedTags 
    }
-   
    onSubmit(values)
+
+   navigateTo('..')
   }
 
   const onNewTagCreation=(label:string) => {
+
     const newTag ={id:uuid() , label}
     onAddTag(newTag)
     setSelectedTags(tags => tags.concat(newTag))
+    
   }
 
 
@@ -49,6 +52,7 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
                 onCreateOption={onNewTagCreation}
                 onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ 
                   return {label:tag.label,id:tag.value} }))}}
+                  options={availableTags.map(tag=>{ return {label:tag.label,value:tag.id}})}
                 id="my-multi" 
                 isMulti 
                 placeholder="Tags"/>

@@ -40,3 +40,9 @@ export interface TagValue{
   label:string;
   value:number
 }
+
+export interface NewNoteProps{
+  onSubmit: (note: NoteData) => void,
+  onAddTag:(tag:Tag) => void,
+  availableTags: Tag[]
+}
