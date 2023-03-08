@@ -2,7 +2,9 @@ import { Container } from "@mui/material";
 import { useMemo } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { v4 as uuid } from 'uuid';
+import { FullNote } from "./components/FullNote";
 import NewNote from "./components/NewNote";
+import NoteLayout from "./components/NoteLayout";
 import NoteList from "./components/NoteList";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { NoteData, RawNote, Tag } from "./types";
@@ -32,10 +34,10 @@ function App() {
               <Route path="/" element={<h1>Home</h1>}/>
               <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>}/>
               <Route path ="/note-list" element={<NoteList notes={notesWithTags} availableTags={tags}/>}/>
-              <Route path="/:id" >   // nested routes follow..
+               <Route path="/:id" element={<FullNote notes={notesWithTags}/>} >   // nested routes follow..
                  
                   //this will show if we navigate to id path
-                  <Route index element={<h1>Show</h1>}/> 
+                  <Route index  element={<NoteLayout/>}/> 
                   // this will show if we navigate to id/edit path
                   <Route path="edit" element={<h1>Edit</h1>}/>
                    

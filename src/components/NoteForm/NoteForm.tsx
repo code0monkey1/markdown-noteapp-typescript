@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
 import { v4 as uuid } from 'uuid';
 import { NoteFormProps, Tag } from '../../types';
+
 export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
  
   const titleRef=useRef<HTMLInputElement>(null)
@@ -34,7 +35,6 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
     
   }
 
-
   return<>
 
       <Grid container spacing={2} direction={'column'} style={{border:"2px solid black",padding:"2rem",borderRadius:"2rem"}}>
@@ -53,6 +53,7 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
                 onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ 
                   return {label:tag.label,id:tag.value} }))}}
                   options={availableTags.map(tag=>{ return {label:tag.label,value:tag.id}})}
+                  
                 id="my-multi" 
                 isMulti 
                 placeholder="Tags"/>

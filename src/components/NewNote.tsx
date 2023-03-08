@@ -13,4 +13,6 @@ const NewNote=({onSubmit,onAddTag,availableTags}:NewNoteProps) =>{
   )
 }
 
+
+
 export default NewNote
