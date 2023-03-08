@@ -3,6 +3,19 @@ export interface Tag {
   id:string;
 }
 
+export interface SimplifiedNote{
+  id:string;
+  tags:Tag[];
+  title:string;
+}
+
+export interface NoteWithTags{
+ tags: Tag[];
+  id: string;
+  title: string;
+  content: string;
+  tagIds: string[];
+}
 export type Note={
   id:string;
 }&NoteData

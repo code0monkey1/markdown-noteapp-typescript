@@ -1,25 +1,43 @@
 
 import { Button, FormControl, Grid, Link, TextField, Typography } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactSelect from 'react-select';
-import { NoteData, Tag } from '../types';
+import { NoteData, NoteWithTags, Tag } from '../types';
 import Note from './Note';
+
 type NotesProps={
-  notes:NoteData[],
+  notes:NoteWithTags[],
   availableTags:Tag[]
 }
 
 function NotesList({notes,availableTags}:NotesProps) {
     
-  const titleRef = useRef()
-
   const navigateTo=useNavigate()
 
   const [selectedTags,setSelectedTags] = useState<Tag[]>([])
 
+  const [title,setTitle] =useState<string>('')
+
   console.log("The notes are ",notes)
-  console.log("Available tags are ",availableTags)
+  console.log("Selected tags are ",selectedTags)
+  console.log("The title is ",title)
+
+  console.log("available tags",availableTags)
+  
+
+ const filteredNotes =useMemo(()=>notes.filter(note=> {
+          
+        //filter by name 
+        return (  (title==='' || note.content.toLowerCase().includes(title.toLowerCase())) 
+        &&  //filter by tag id
+        (selectedTags.length===0 || selectedTags.every(tag=> 
+          note.tags.some(noteTag => noteTag.id===tag.id))   
+          )
+          )
+ 
+ }),[title,selectedTags,notes])
+
   return (
     <>
       <Grid container >
@@ -35,7 +53,7 @@ function NotesList({notes,availableTags}:NotesProps) {
        <Grid item container xs={12} spacing={4} justifyContent={'center'} >
             <Grid item xs={6}>
                 <FormControl style={{width:'100%'}}>
-                  <TextField type='text' inputRef={titleRef} style={{justifySelf:"stretch"}}  placeholder='Title' id="my-input" aria-describedby="my-helper-text" />
+                  <TextField type='text' value={title} onChange={({target})=>{setTitle(target.value)}} style={{justifySelf:"stretch"}}  placeholder='Title' id="my-input" aria-describedby="my-helper-text" />
               </FormControl>
             </Grid>
             <Grid item xs={6}>
@@ -56,7 +74,11 @@ function NotesList({notes,availableTags}:NotesProps) {
               </FormControl>
             </Grid> 
             <Grid container item spacing={2}>
-              {notes.map(note => <Grid key={note.title} item xs={6} ><Note note={note}/></Grid>)}
+              {filteredNotes.map(note =>
+               <Grid key={note.title} item xs={6} >
+                 <Note {...note}/>
+               </Grid>)
+                }
             </Grid>
         </Grid> 
       </Grid>
