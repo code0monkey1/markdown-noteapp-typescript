@@ -5,26 +5,21 @@ import { Box, Button, FormControl, Grid, InputLabel, TextField, Typography } fro
 import { Link, useNavigate } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
 import { v4 as uuid } from 'uuid';
-import { NoteFormProps, RawNote, Tag } from '../types';
+import { RawNote, Tag } from '../types';
 import { useNote } from './FullNote';
-
+export interface NoteFormProps {
+  onAddTag:(tag:Tag) => void
+  onSubmit:(note: RawNote)=>void;
+  availableTags:Tag[]
+}
 
 export function EditNote({onSubmit,onAddTag,availableTags}:NoteFormProps) {
- 
-  const titleRef=useRef<HTMLInputElement>(null)
-  const  contentRef = useRef<HTMLInputElement>(null)
-  const [selectedTags,setSelectedTags] = useState<Tag[]>([])
-  const navigateTo = useNavigate();
   const note = useNote()
 
-  useEffect(()=>{
-      
-     (titleRef.current!).value=note.title as string
-     (contentRef.current!).value=note.content
-
-     setSelectedTags(note.tags)
-     
-  },[])
+  const titleRef=useRef<HTMLInputElement>(null)
+  const  contentRef = useRef<HTMLInputElement>(null)
+  const [selectedTags,setSelectedTags] = useState<Tag[]>(note.tags)
+  const navigateTo = useNavigate();
 
     const onNewTagCreation=(label:string) => {
 
@@ -60,7 +55,7 @@ export function EditNote({onSubmit,onAddTag,availableTags}:NoteFormProps) {
         <Grid item container xs={12} spacing={4} justifyContent={'center'} >
             <Grid item xs={6}>
                 <FormControl style={{width:'100%'}}>
-                  <TextField type='text' inputRef={titleRef} style={{justifySelf:"stretch"}}  placeholder='Title' id="my-input" aria-describedby="my-helper-text" />
+                  <TextField type='text' inputRef={titleRef} style={{justifySelf:"stretch"}}  placeholder='Title' id="my-input" aria-describedby="my-helper-text" defaultValue={note.title} />
               </FormControl>
             </Grid>
             <Grid item xs={6}>
@@ -94,6 +89,7 @@ export function EditNote({onSubmit,onAddTag,availableTags}:NoteFormProps) {
                       minRows={20}
                       placeholder="Content"
                       style={{padding:"1rem"}}
+                      defaultValue={note.content}
                     />
                 </FormControl>
             </Grid>
