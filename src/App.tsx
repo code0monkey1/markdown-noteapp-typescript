@@ -8,7 +8,7 @@ import NewNote from "./components/NewNote";
 import NoteLayout from "./components/NoteLayout";
 import NoteList from "./components/NoteList";
 import useLocalStorage from "./hooks/useLocalStorage";
-import { Note, NoteData, RawNote, Tag } from "./types";
+import { NoteData, RawNote, Tag } from "./types";
 
 function App() {
 
@@ -40,7 +40,7 @@ function App() {
 
     const addTag=(tag:Tag)=>{
        
-      setTags(tags=> tags.concat(tag))
+      setTags(tags=>  tags.concat(tag))
   }
 
   const deleteTag=(id:string)=>{
@@ -63,7 +63,7 @@ function App() {
                   //this will show if we navigate to id path
                   <Route index  element={<NoteLayout deleteNote={deleteNote}/>}/> 
                   // this will show if we navigate to id/edit path
-                  <Route path="edit" element={<EditNote onSubmit={onEditNote}/>}/>
+                  <Route path="edit" element={<EditNote onAddTag={addTag} onSubmit={onEditNote} availableTags={tags}/>}/>
                    
               </Route>
               // will bring back Home page if path not found     

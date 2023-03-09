@@ -5,10 +5,11 @@ import { Box, Button, FormControl, Grid, InputLabel, TextField, Typography } fro
 import { Link, useNavigate } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
 import { v4 as uuid } from 'uuid';
-import { RawNote, Tag } from '../types';
+import { NoteFormProps, RawNote, Tag } from '../types';
 import { useNote } from './FullNote';
 
-export function EditNote({onSubmit}:{onSubmit(note: RawNote):void}) {
+
+export function EditNote({onSubmit,onAddTag,availableTags}:NoteFormProps) {
  
   const titleRef=useRef<HTMLInputElement>(null)
   const  contentRef = useRef<HTMLInputElement>(null)
@@ -25,6 +26,13 @@ export function EditNote({onSubmit}:{onSubmit(note: RawNote):void}) {
      
   },[])
 
+    const onNewTagCreation=(label:string) => {
+
+    const newTag ={id:uuid() , label}
+    onAddTag(newTag)
+    setSelectedTags(tags => tags.concat(newTag))
+    
+  }
   
   const onEditSubmit=(event: FormEvent)=>{
    event.preventDefault();
@@ -42,12 +50,6 @@ export function EditNote({onSubmit}:{onSubmit(note: RawNote):void}) {
    navigateTo('..')
   }
   
-  const onNewTagCreation=(label:string) => {
-
-    const newTag ={id:uuid() , label}
-    // onAddTag(newTag)
-    setSelectedTags(tags => tags.concat(newTag))
-  }
 
   return<>
 
@@ -65,11 +67,19 @@ export function EditNote({onSubmit}:{onSubmit(note: RawNote):void}) {
               <FormControl style={{width:"100%",paddingTop:"0.8rem"}}> 
                 {/* Create React Select Expects an object label and value attributes*/}
                 <CreatableReactSelect 
+                
                 value={selectedTags.map(tag=>{ return {label:tag.label,value:tag.id} }) } 
                 onCreateOption={onNewTagCreation}
-                onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ 
-                  return {label:tag.label,id:tag.value} }))}}
-                  // options={availableTags.map(tag=>{ return {label:tag.label,value:tag.id}})}
+                
+                onChange={(tags)=>{ 
+                 
+                  setSelectedTags(tags.map(tag=>{ 
+                  return {label:tag.label,id:tag.value} }))}
+                }
+                 
+                  options={availableTags?.map(tag=>{ return {label:tag.label,value:tag.id}}
+                    
+                    )}
                   
                 id="my-multi" 
                 isMulti 

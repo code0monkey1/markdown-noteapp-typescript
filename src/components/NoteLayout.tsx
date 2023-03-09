@@ -1,7 +1,7 @@
 import { Box, Button, Card, Grid, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { NoteWithTags } from '../types';
 import { useNote } from "./FullNote";
 
