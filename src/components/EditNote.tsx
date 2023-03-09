@@ -1,43 +1,59 @@
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import { Box, Button, FormControl, Grid, InputLabel, TextField } from '@mui/material';
+import { Box, Button, FormControl, Grid, InputLabel, TextField, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import CreatableReactSelect from 'react-select/creatable';
 import { v4 as uuid } from 'uuid';
-import { NoteFormProps, Tag } from '../../types';
+import { RawNote, Tag } from '../types';
+import { useNote } from './FullNote';
 
-export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
+export function EditNote({onSubmit}:{onSubmit(note: RawNote):void}) {
  
   const titleRef=useRef<HTMLInputElement>(null)
   const  contentRef = useRef<HTMLInputElement>(null)
   const [selectedTags,setSelectedTags] = useState<Tag[]>([])
   const navigateTo = useNavigate();
+  const note = useNote()
+
+  useEffect(()=>{
+      
+     (titleRef.current!).value=note.title as string
+     (contentRef.current!).value=note.content
+
+     setSelectedTags(note.tags)
+     
+  },[])
+
   
-  const onNoteSubmit=(event: FormEvent)=>{
+  const onEditSubmit=(event: FormEvent)=>{
    event.preventDefault();
      
    const values ={
+     ...note,
     title:titleRef.current?.value!,
     content:contentRef.current?.value!,
-    tags:selectedTags 
+    tagIds:selectedTags.map(tag => tag.id) ,
    }
+
+   console.log("Values to be submitted", JSON.stringify(values,null,2))
    onSubmit(values)
 
-   navigateTo("/note-list")
+   navigateTo('..')
   }
-
+  
   const onNewTagCreation=(label:string) => {
 
     const newTag ={id:uuid() , label}
-    onAddTag(newTag)
+    // onAddTag(newTag)
     setSelectedTags(tags => tags.concat(newTag))
-    
   }
 
   return<>
 
-      <Grid container spacing={2} direction={'column'} style={{border:"2px solid black",padding:"2rem",borderRadius:"2rem"}}>
+   <Typography variant='h2'style={{fontFamily:"Nunito"}}>Edit Note</Typography>
+    <Grid container spacing={2} direction={'column'} style={{border:"2px solid black",padding:"2rem",borderRadius:"2rem",marginTop:"2rem"}}>
+      
       <Box component={"form"} noValidate sx={{m:3}}>
         <Grid item container xs={12} spacing={4} justifyContent={'center'} >
             <Grid item xs={6}>
@@ -48,11 +64,12 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
             <Grid item xs={6}>
               <FormControl style={{width:"100%",paddingTop:"0.8rem"}}> 
                 {/* Create React Select Expects an object label and value attributes*/}
-                <CreatableReactSelect value={selectedTags.map(tag=>{ return {label:tag.label,value:tag.id} }) } 
+                <CreatableReactSelect 
+                value={selectedTags.map(tag=>{ return {label:tag.label,value:tag.id} }) } 
                 onCreateOption={onNewTagCreation}
                 onChange={(tags)=>{ setSelectedTags(tags.map(tag=>{ 
                   return {label:tag.label,id:tag.value} }))}}
-                  options={availableTags.map(tag=>{ return {label:tag.label,value:tag.id}})}
+                  // options={availableTags.map(tag=>{ return {label:tag.label,value:tag.id}})}
                   
                 id="my-multi" 
                 isMulti 
@@ -73,7 +90,7 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
             <Grid item container xs={12} spacing={4} justifyContent={'center'}>
                 
               <Grid item>
-                <Button variant='contained' type="submit" onClick={onNoteSubmit}>Submit</Button>
+                <Button variant='contained' type="submit" onClick={onEditSubmit}>Submit</Button>
               </Grid> 
           
               <Grid item>
@@ -87,6 +104,6 @@ export function NoteForm({onSubmit,onAddTag,availableTags}: NoteFormProps) {
         
      </Box>
       </Grid>
-
-  </> 
+     </>
+  
 }

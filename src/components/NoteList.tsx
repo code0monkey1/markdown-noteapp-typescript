@@ -1,5 +1,5 @@
 
-import { Button, FormControl, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, Grid, Link, Modal, TextField, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactSelect from 'react-select';
@@ -8,10 +8,26 @@ import Note from './Note';
 
 type NotesProps={
   notes:NoteWithTags[],
-  availableTags:Tag[]
+  availableTags:Tag[],
+  deleteTag:(tag:string) =>void
 }
 
-function NotesList({notes,availableTags}:NotesProps) {
+function NotesList({notes,availableTags,deleteTag}:NotesProps) {
+
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3
+};
     
   const navigateTo=useNavigate()
 
@@ -24,6 +40,15 @@ function NotesList({notes,availableTags}:NotesProps) {
   console.log("The title is ",title)
 
   console.log("available tags",availableTags)
+
+   const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   
 
  const filteredNotes =useMemo(()=>notes.filter(note=> {
@@ -38,6 +63,8 @@ function NotesList({notes,availableTags}:NotesProps) {
  
  }),[title,selectedTags,notes])
 
+
+
   return (
     <>
       <Grid container >
@@ -46,8 +73,38 @@ function NotesList({notes,availableTags}:NotesProps) {
            <Typography variant="h2" style={{fontFamily:"monospace"}}>NOTES</Typography>
           </Grid>
           <Grid item container xs={6} spacing={2} justifyContent={'flex-end'} >
-              <Grid item><Button variant='contained' onClick={()=>{navigateTo("/new")}}>Crate</Button></Grid>
-              <Grid item> <Button variant='outlined'>Edit Tags </Button> </Grid>
+              <Grid item><Button variant='contained' onClick={()=>{navigateTo("/new")}}>Create Note</Button></Grid>
+              <Grid item> 
+              
+              <Button onClick={handleOpen} variant='outlined'>Edit Tags </Button> 
+                <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="parent-modal-title"
+                  aria-describedby="parent-modal-description"
+                >
+        <Box sx={{ ...style, width: 400 }}>
+          <ul>
+            {availableTags.map(tag => <Grid container justifyContent={'space-between'}  key={tag.id}>
+              <Grid xs={6} item > 
+                <Button style={{width:"100%"}}>{ tag.label}</Button> 
+              </Grid>
+              <Grid item xs={6} > 
+                <Button 
+                 onClick={() =>deleteTag(tag.id)}
+                 style={{margin:"0.5rem"}} 
+                 variant='outlined' 
+                 color={'error'}>
+                  {`   Delete Tag`}
+                </Button>
+              </Grid>
+               </Grid>)
+               }
+          </ul>
+          
+        </Box>
+      </Modal>
+              </Grid>
           </Grid>
         </Grid>
        <Grid item container xs={12} spacing={4} justifyContent={'center'} >
