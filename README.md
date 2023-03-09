@@ -1,2 +1,2 @@
 # markdown-noteapp-typescript
- Typescript Markdown Notes
+ A typescript Markdown Blog app with Tags support 
