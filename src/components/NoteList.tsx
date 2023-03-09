@@ -9,10 +9,11 @@ import Note from './Note';
 type NotesProps={
   notes:NoteWithTags[],
   availableTags:Tag[],
-  deleteTag:(tag:string) =>void
+  deleteTag:(tag:string) =>void,
+  editTag:(tag:Tag) =>void
 }
 
-function NotesList({notes,availableTags,deleteTag}:NotesProps) {
+function NotesList({notes,availableTags,deleteTag,editTag}:NotesProps) {
 
 
 const style = {
@@ -87,7 +88,7 @@ const style = {
           <ul>
             {availableTags.map(tag => <Grid container justifyContent={'space-between'}  key={tag.id}>
               <Grid xs={6} item > 
-                <Button style={{width:"100%"}}>{ tag.label}</Button> 
+                <TextField value={tag.label} style={{width:"100%"}} onChange={(e)=>editTag({id:tag.id,label:e.target.value})}/> 
               </Grid>
               <Grid item xs={6} > 
                 <Button 

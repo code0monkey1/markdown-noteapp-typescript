@@ -40,6 +40,7 @@ export function EditNote({onSubmit,onAddTag,availableTags}:NoteFormProps) {
    }
 
    console.log("Values to be submitted", JSON.stringify(values,null,2))
+   
    onSubmit(values)
 
    navigateTo('..')
