@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "git": "git add . && git commit -m 'things' && git push origin"
+    "git": "git add . && git commit -m 'things' && git push"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
