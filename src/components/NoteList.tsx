@@ -1,9 +1,9 @@
 
 import { Button, FormControl, Grid, Link, TextField, Typography } from '@mui/material';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactSelect from 'react-select';
-import { NoteData, NoteWithTags, Tag } from '../types';
+import { NoteWithTags, Tag } from '../types';
 import Note from './Note';
 
 type NotesProps={
