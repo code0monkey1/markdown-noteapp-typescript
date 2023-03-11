@@ -56,13 +56,14 @@ function App() {
     setTags(tags=> tags.map( tag => tag.id===editedTag.id?editedTag:tag))
     
   }
+  
   return (
     <div >
       <Container style={{textAlign:"center"}}>
           <Routes>
-              <Route path="/" element={<h1>Home</h1>}/>
+              
               <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>}/>
-              <Route path ="/note-list" element={<NoteList notes={notesWithTags} availableTags={tags} deleteTag={deleteTag} editTag={editTag}/>}/>
+              <Route path ="/" element={<NoteList notes={notesWithTags} availableTags={tags} deleteTag={deleteTag} editTag={editTag}/>}/>
                <Route path="/:id" element={<FullNote notes={notesWithTags}/>} > // nested routes follow..
                  
                   //this will show if we navigate to id path
